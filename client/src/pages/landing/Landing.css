@@ -1,0 +1,210 @@
+.landing-page {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 64px);
+}
+
+.hero {
+  position: relative;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #1e3a8a 100%);
+  padding: 6rem 0;
+  overflow: hidden;
+  color: var(--white);
+}
+
+.hero-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5C16.1929 5 5 16.1929 5 30C5 43.8071 16.1929 55 30 55C43.8071 55 55 43.8071 55 30C55 16.1929 43.8071 5 30 5ZM30 11C40.4934 11 49 19.5066 49 30C49 40.4934 40.4934 49 30 49C19.5066 49 11 40.4934 11 30C11 19.5066 19.5066 11 30 11ZM30 20C24.4772 20 20 24.4772 20 30C20 35.5228 24.4772 40 30 40C35.5228 40 40 35.5228 40 30C40 24.4772 35.5228 20 30 20ZM30 26C32.2091 26 34 27.7909 34 30C34 32.2091 32.2091 34 30 34C27.7909 34 26 32.2091 26 30C26 27.7909 27.7909 26 30 26Z' fill='rgba(255,255,255,0.05)' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-position: center;
+  opacity: 0.3;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-text {
+  max-width: 800px;
+  margin-bottom: 4rem;
+}
+
+.hero-title {
+  font-size: 4.5rem;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  margin-bottom: 1rem;
+  color: var(--white);
+  line-height: 1.1;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+}
+
+.role-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  width: 100%;
+}
+
+.role-card {
+  padding: 2.5rem 2rem;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: var(--gray-800);
+}
+
+.role-card h3 {
+  font-size: 1.5rem;
+  color: var(--text-main);
+}
+
+.role-card p {
+  color: var(--gray-700);
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+.role-icon-wrapper {
+  display: inline-flex;
+  padding: 1rem;
+  border-radius: 16px;
+  margin-bottom: 0.5rem;
+  align-self: flex-start;
+}
+
+.citizen-icon { background-color: #e0e7ff; color: #4f46e5; }
+.police-icon { background-color: #fee2e2; color: #dc2626; }
+.admin-icon { background-color: #f3e8ff; color: #9333ea; }
+
+.w-full {
+  width: 100%;
+}
+
+/* How it works */
+.how-it-works {
+  padding: 6rem 1.5rem;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  margin-bottom: 4rem;
+  color: var(--primary-blue);
+}
+
+.steps-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+}
+
+.step-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.step-card h3 {
+  margin: 1.5rem 0 1rem;
+  font-size: 1.25rem;
+}
+
+.step-card p {
+  color: var(--text-muted);
+}
+
+.step-number {
+  position: absolute;
+  top: 0;
+  right: 2rem;
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--surface);
+  line-height: 1;
+  z-index: -1;
+}
+
+.step-icon {
+  color: var(--primary-blue);
+}
+
+/* Footer */
+.landing-footer {
+  background-color: var(--gray-800);
+  color: var(--gray-300);
+  margin-top: auto;
+}
+
+.tricolor-strip {
+  display: flex;
+  flex-direction: column;
+  height: 6px;
+}
+
+.saffron { background-color: #FF9933; height: 2px; }
+.white { background-color: #FFFFFF; height: 2px; }
+.green { background-color: #138808; height: 2px; }
+
+.footer-content {
+  padding: 2rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .role-cards {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+  }
+  
+  .steps-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .hero-title {
+    font-size: 3.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
