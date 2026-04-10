@@ -64,8 +64,7 @@ const ComplaintsMgmt = () => {
                 <th>Category</th>
                 <th>Status</th>
                 <th>Date</th>
-                <th>Assigned Officer</th>
-                <th>Action / Assign</th>
+                <th>Assign Officer</th>
               </tr>
             </thead>
             <tbody>
@@ -77,15 +76,14 @@ const ComplaintsMgmt = () => {
                   <td>{c.category}</td>
                   <td><StatusBadge status={c.status} /></td>
                   <td>{new Date(c.incidentDate).toLocaleDateString()}</td>
-                  <td>{c.assignedTo?.name || <span className="text-muted text-sm">Unassigned</span>}</td>
                   <td>
                     <select 
                       className="filter-select"
-                      style={{fontSize: '0.8rem', padding: '0.25rem'}}
-                      value=""
+                      style={{fontSize: '0.8rem', padding: '0.25rem', maxWidth: '180px'}}
+                      value={c.assignedTo ? c.assignedTo._id : ""}
                       onChange={(e) => handleAssign(c._id, e.target.value)}
                     >
-                      <option value="">-- Assign --</option>
+                      <option value="">Unassigned</option>
                       {officers.map(o => (
                         <option key={o._id} value={o._id}>{o.name} ({o.badgeNumber})</option>
                       ))}

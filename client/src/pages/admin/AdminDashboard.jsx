@@ -2,28 +2,55 @@ import React, { useEffect, useState } from 'react';
 import { Shield, FileText, User, UserCheck } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { Link } from 'react-router-dom';
 import api from '../../api/axios';
+import StatusBadge from '../../components/shared/StatusBadge';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
+  const [recentComplaints, setRecentComplaints] = useState([]);
+  const [recentFirs, setRecentFirs] = useState([]);
+  const [officers, setOfficers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Colors for Recharts
   const COLORS = ['#0A2463', '#2D9B5A', '#D62828', '#F4A261', '#9333ea', '#6b7280'];
 
   useEffect(() => {
-    const fetchStats = async () => {
+    const fetchDashboardData = async () => {
       try {
-        const res = await api.get('/admin/stats');
-        setStats(res.data.data);
+        const [statsRes, complaintsRes, firsRes, officersRes] = await Promise.all([
+          api.get('/admin/stats'),
+          api.get('/admin/complaints?page=1&limit=5'),
+          api.get('/admin/firs?page=1&limit=5'),
+          api.get('/admin/police?limit=100')
+        ]);
+        setStats(statsRes.data.data);
+        setRecentComplaints(complaintsRes.data.data);
+        setRecentFirs(firsRes.data.data);
+        setOfficers(officersRes.data.data);
       } catch (error) {
-        toast.error('Failed to load dashboard statistics');
+        toast.error('Failed to load dashboard data');
       } finally {
         setLoading(false);
       }
     };
-    fetchStats();
+    fetchDashboardData();
   }, []);
+
+  const handleAssign = async (complaintId, officerId) => {
+    if (!officerId) return;
+    try {
+      await api.put(`/admin/complaints/${complaintId}/assign`, { officerId });
+      toast.success('Complaint assigned successfully');
+      
+      // Refresh complaints directly
+      const complaintsRes = await api.get('/admin/complaints?page=1&limit=5');
+      setRecentComplaints(complaintsRes.data.data);
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Assignment failed');
+    }
+  };
 
   if (loading) return <div className="container p-8 text-center text-muted">Loading analytics...</div>;
   if (!stats) return null;
@@ -161,6 +188,85 @@ const AdminDashboard = () => {
               ))}
             </tbody>
           </table>
+        </div>
+      </div>
+
+      {/* Recent Records */}
+      <div className="grid-2 gap-6 mt-8 mb-8">
+        <div className="card">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="mb-0">Recent Complaints</h3>
+            <Link to="/admin/complaints" className="btn btn-secondary btn-sm no-underline text-xs">View All</Link>
+          </div>
+          <div className="table-responsive">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Assignment</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentComplaints.map(c => (
+                  <tr key={c._id}>
+                    <td><span className="id-text" style={{fontSize:'0.8rem'}}>{c.complaintId}</span></td>
+                    <td>{c.category}</td>
+                    <td><StatusBadge status={c.status} /></td>
+                    <td>{new Date(c.incidentDate).toLocaleDateString()}</td>
+                    <td>
+                      <select 
+                        className="filter-select"
+                        style={{fontSize: '0.75rem', padding: '0.1rem', maxWidth: '120px'}}
+                        value={c.assignedTo ? c.assignedTo._id : ""}
+                        onChange={(e) => handleAssign(c._id, e.target.value)}
+                      >
+                        <option value="">Unassigned</option>
+                        {officers.map(o => (
+                          <option key={o._id} value={o._id}>{o.name}</option>
+                        ))}
+                      </select>
+                    </td>
+                  </tr>
+                ))}
+                {recentComplaints.length === 0 && (
+                  <tr><td colSpan="5" className="text-center py-4 text-muted">No complaints found</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="mb-0">Recent FIRs</h3>
+            <Link to="/admin/firs" className="btn btn-secondary btn-sm no-underline text-xs">View All</Link>
+          </div>
+          <div className="table-responsive">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>FIR No.</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentFirs.map(fir => (
+                  <tr key={fir._id}>
+                    <td><span className="id-text" style={{fontSize:'0.8rem'}}>{fir.firNumber}</span></td>
+                    <td><StatusBadge status={fir.status} /></td>
+                    <td>{new Date(fir.firDate).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+                {recentFirs.length === 0 && (
+                  <tr><td colSpan="3" className="text-center py-4 text-muted">No FIRs found</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

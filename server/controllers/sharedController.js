@@ -41,8 +41,8 @@ const getPoliceStations = async (req, res, next) => {
     const { district, state } = req.query;
 
     const filter = {};
-    if (district) filter.district = district;
-    if (state) filter.state = state;
+    if (district) filter.district = new RegExp(`^${district}$`, 'i');
+    if (state) filter.state = new RegExp(`^${state}$`, 'i');
 
     const stations = await PoliceStation.find(filter)
       .populate('inChargeOfficer', 'name rank badgeNumber')

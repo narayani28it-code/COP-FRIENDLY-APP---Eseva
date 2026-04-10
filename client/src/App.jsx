@@ -28,6 +28,7 @@ import ComplaintsMgmt from './pages/admin/ComplaintsMgmt';
 import FIRsMgmt from './pages/admin/FIRsMgmt';
 import PoliceMgmt from './pages/admin/PoliceMgmt';
 import CitizenMgmt from './pages/admin/CitizenMgmt';
+import AdminLogin from './pages/admin/AdminLogin';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/login" element={<UnifiedLogin />} />
+              <Route path="/admin/login" element={<AdminLogin />} />
 
               {/* Citizen Routes */}
               <Route element={<ProtectedRoute allowedRoles={['citizen']} />}>

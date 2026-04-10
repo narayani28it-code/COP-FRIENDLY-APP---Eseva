@@ -29,7 +29,9 @@ const PoliceDashboard = () => {
 
   const filteredComplaints = filter === 'All' 
     ? complaints 
-    : complaints.filter(c => c.status === filter);
+    : filter === 'AssignedToMe'
+      ? complaints.filter(c => c.assignedTo?._id === user?._id)
+      : complaints.filter(c => c.status === filter);
 
   return (
     <div className="container page-wrapper dashboard-page">
@@ -54,22 +56,22 @@ const PoliceDashboard = () => {
       </div>
 
       <div className="stats-grid mb-8">
-        <div className="stat-card">
+        <div className="stat-card" style={{cursor: 'pointer'}} onClick={() => setFilter('All')}>
           <div className="stat-icon bg-red-100 text-danger"><ShieldAlert size={20} /></div>
           <div className="stat-value">{complaints.length}</div>
           <div className="stat-label">Total Station Complaints</div>
         </div>
-        <div className="stat-card">
+        <div className="stat-card" style={{cursor: 'pointer'}} onClick={() => setFilter('Filed')}>
           <div className="stat-icon bg-yellow-100 text-warning"><AlertOctagon size={20} /></div>
           <div className="stat-value">{complaints.filter(c => c.status === 'Filed').length}</div>
           <div className="stat-label">Pending Review</div>
         </div>
-        <div className="stat-card">
+        <div className="stat-card" style={{cursor: 'pointer'}} onClick={() => setFilter('AssignedToMe')}>
           <div className="stat-icon bg-blue-100 text-primary-blue"><UserCheck size={20} /></div>
           <div className="stat-value">{complaints.filter(c => c.assignedTo?._id === user?._id).length}</div>
           <div className="stat-label">Assigned to Me</div>
         </div>
-        <div className="stat-card border-green">
+        <div className="stat-card border-green" style={{cursor: 'pointer'}} onClick={() => setFilter('FIR Registered')}>
           <div className="stat-icon bg-green-100 text-success"><FileSearch size={20} /></div>
           <div className="stat-value">{complaints.filter(c => c.status === 'FIR Registered').length}</div>
           <div className="stat-label">FIRs Registered</div>
@@ -82,6 +84,7 @@ const PoliceDashboard = () => {
           <div className="filter-group">
             <select className="filter-select" value={filter} onChange={e => setFilter(e.target.value)}>
               <option value="All">All Statuses</option>
+              <option value="AssignedToMe">Assigned to Me</option>
               <option value="Filed">Pending Review</option>
               <option value="Under Review">Under Review</option>
               <option value="FIR Registered">FIR Registered</option>

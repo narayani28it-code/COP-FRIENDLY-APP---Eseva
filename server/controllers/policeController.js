@@ -32,7 +32,10 @@ const getComplaints = async (req, res, next) => {
     // OR if the officer has a district assigned. Otherwise show all.
     const targetDistrict = district || req.user.district;
     if (targetDistrict) {
-      filter.district = targetDistrict;
+      filter.$or = [
+        { district: targetDistrict },
+        { assignedTo: req.user._id }
+      ];
     }
 
     if (state) filter.state = state;

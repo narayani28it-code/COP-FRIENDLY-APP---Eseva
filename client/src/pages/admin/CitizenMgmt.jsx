@@ -36,7 +36,7 @@ const CitizenMgmt = () => {
           <table className="data-table">
             <thead>
               <tr>
-                <th>Name</th>
+                <th>Name / Username</th>
                 <th>Mobile</th>
                 <th>Email</th>
                 <th>State</th>
@@ -49,8 +49,8 @@ const CitizenMgmt = () => {
                 <tr><td colSpan="6" className="text-center py-4 text-muted">Loading...</td></tr>
               ) : citizens.map(c => (
                 <tr key={c._id}>
-                  <td><strong>{c.name}</strong></td>
-                  <td>{c.mobile}</td>
+                  <td><strong>{c.name || c.username}</strong></td>
+                  <td>{c.mobile || '-'}</td>
                   <td>{c.email || '-'}</td>
                   <td>{c.state}</td>
                   <td>{c.district}</td>
